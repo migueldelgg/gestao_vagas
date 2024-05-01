@@ -1,10 +1,13 @@
 package br.com.migueldelgado.gestao_vagas.modules.candidate.controller;
 
+import br.com.migueldelgado.gestao_vagas.exceptions.UserFoundException;
 import br.com.migueldelgado.gestao_vagas.modules.candidate.entity.CandidateEntity;
 import br.com.migueldelgado.gestao_vagas.modules.candidate.repository.CandidateRepository;
+import br.com.migueldelgado.gestao_vagas.modules.candidate.useCase.CreateCandidateUseCase;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,12 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class CandidateController {
 
     @Autowired
-    private CandidateRepository candidateRepository;
+    CreateCandidateUseCase createCandidateUseCase;
 
     @PostMapping("/")
-    public CandidateEntity create(@Valid @RequestBody CandidateEntity candidateEntity){
-        return candidateRepository.save(candidateEntity);
-
+    public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity){
+        try{
+            var result = createCandidateUseCase.execute(candidateEntity);
+            return ResponseEntity.ok().body(result);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 

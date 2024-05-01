@@ -1,4 +1,4 @@
-package br.com.migueldelgado.gestao_vagas.modules.candidate.exceptions;
+package br.com.migueldelgado.gestao_vagas.exceptions;
 
 
 import org.springframework.context.MessageSource;
