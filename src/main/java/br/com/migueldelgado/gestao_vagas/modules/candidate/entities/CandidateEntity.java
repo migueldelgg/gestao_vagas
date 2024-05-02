@@ -1,4 +1,4 @@
-package br.com.migueldelgado.gestao_vagas.modules.candidate.entity;
+package br.com.migueldelgado.gestao_vagas.modules.candidate.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

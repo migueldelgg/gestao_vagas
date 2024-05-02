@@ -1,6 +1,6 @@
-package br.com.migueldelgado.gestao_vagas.modules.company.repository;
+package br.com.migueldelgado.gestao_vagas.modules.company.repositories;
 
-import br.com.migueldelgado.gestao_vagas.modules.company.entity.CompanyEntity;
+import br.com.migueldelgado.gestao_vagas.modules.company.entities.CompanyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

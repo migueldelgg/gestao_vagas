@@ -1,8 +1,8 @@
 package br.com.migueldelgado.gestao_vagas.modules.company.useCase;
 
 import br.com.migueldelgado.gestao_vagas.exceptions.UserFoundException;
-import br.com.migueldelgado.gestao_vagas.modules.company.entity.CompanyEntity;
-import br.com.migueldelgado.gestao_vagas.modules.company.repository.CompanyRepository;
+import br.com.migueldelgado.gestao_vagas.modules.company.entities.CompanyEntity;
+import br.com.migueldelgado.gestao_vagas.modules.company.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

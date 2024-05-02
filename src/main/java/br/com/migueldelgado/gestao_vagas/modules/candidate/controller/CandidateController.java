@@ -1,12 +1,9 @@
 package br.com.migueldelgado.gestao_vagas.modules.candidate.controller;
 
-import br.com.migueldelgado.gestao_vagas.exceptions.UserFoundException;
-import br.com.migueldelgado.gestao_vagas.modules.candidate.entity.CandidateEntity;
-import br.com.migueldelgado.gestao_vagas.modules.candidate.repository.CandidateRepository;
+import br.com.migueldelgado.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.migueldelgado.gestao_vagas.modules.candidate.useCase.CreateCandidateUseCase;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

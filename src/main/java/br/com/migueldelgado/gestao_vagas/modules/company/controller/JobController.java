@@ -1,6 +1,6 @@
 package br.com.migueldelgado.gestao_vagas.modules.company.controller;
 
-import br.com.migueldelgado.gestao_vagas.modules.company.entity.JobEntity;
+import br.com.migueldelgado.gestao_vagas.modules.company.entities.JobEntity;
 import br.com.migueldelgado.gestao_vagas.modules.company.useCase.CreateJobUseCase;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package br.com.migueldelgado.gestao_vagas.modules.company.entity;
+package br.com.migueldelgado.gestao_vagas.modules.company.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
