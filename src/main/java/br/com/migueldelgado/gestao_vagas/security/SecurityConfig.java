@@ -15,8 +15,13 @@ public class SecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
 
+    /**
+     * Configuração de segurança para a aplicação.
+     * @param http O objeto HttpSecurity para configurar as regras de segurança
+     * @return Um objeto SecurityFilterChain contendo as configurações de segurança
+     * @throws Exception se ocorrer um erro durante a configuração
+     */
     @Bean
-//Sobreescreve o metodo original SecurityFilterChain
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
@@ -29,6 +34,10 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Cria um bean para o PasswordEncoder usado na autenticação.
+     * @return Um objeto PasswordEncoder para codificar e verificar senhas
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

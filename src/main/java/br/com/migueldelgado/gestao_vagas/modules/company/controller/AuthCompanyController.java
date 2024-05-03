@@ -20,6 +20,12 @@ public class AuthCompanyController {
     @Autowired
     AuthCompanyUseCase authCompanyUseCase;
 
+    /**
+     * Endpoint para autenticação de empresas.
+     * @param authCompanyDTO O objeto AuthCompanyDTO contendo as credenciais da empresa para autenticação
+     * @return ResponseEntity com o status HTTP e, em caso de sucesso, os dados da empresa autenticada
+     * @throws AuthenticationException se a autenticação falhar
+     */
     @PostMapping("/company")
     public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
 

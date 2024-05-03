@@ -16,15 +16,25 @@ public class CreateCompanyUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public CompanyEntity execute(CompanyEntity companyEntity){
+    /**
+     * Executa a criação de uma nova empresa.
+     * @param companyEntity O objeto CompanyEntity contendo os dados da empresa a ser criada
+     * @return O objeto CompanyEntity criado e persistido no banco de dados
+     * @throws UserFoundException se uma empresa com o mesmo nome de usuário ou e-mail já existir no sistema
+     */
+    public CompanyEntity execute(CompanyEntity companyEntity) throws UserFoundException {
 
+        // Verifica se já existe uma empresa com o mesmo nome de usuário ou e-mail
         this.companyRepository.findByUsernameOrEmail(companyEntity.getUsername(), companyEntity.getEmail())
                 .ifPresent((user) -> {
                     throw new UserFoundException();
                 });
 
+        // Codifica a senha antes de salvar no banco de dados
         var password = passwordEncoder.encode(companyEntity.getPassword());
         companyEntity.setPassword(password);
+
+        // Salva a nova empresa no banco de dados
         return this.companyRepository.save(companyEntity);
     }
 }

@@ -8,6 +8,10 @@ import java.util.UUID;
 
 public interface CandidateRepository extends JpaRepository<CandidateEntity, UUID> {
 
+    /**
+     * Utilizando das vantagens do spring para fazer um método que retorna uma busca por Username ou Email.
+     * sintaxe -> findBy Atributo Condicional(or, and) Atributo
+     */
     Optional<CandidateEntity> findByUsernameOrEmail(String username, String email);
 
 

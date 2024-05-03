@@ -16,6 +16,11 @@ public class JobController {
     @Autowired
     private CreateJobUseCase createJobUseCase;
 
+    /**
+     * Endpoint para criar uma nova vaga de emprego.
+     * @param jobEntity O objeto JobEntity contendo os dados da vaga de emprego a ser criada
+     * @return O objeto JobEntity criado e persistido no banco de dados
+     */
     @PostMapping("/")
     public JobEntity create(@Valid @RequestBody JobEntity jobEntity){
         return createJobUseCase.execute(jobEntity);

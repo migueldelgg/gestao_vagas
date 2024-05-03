@@ -26,25 +26,32 @@ public class AuthCompanyUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
+    /**
+     * Executa a autenticação de uma empresa.
+     * @param authCompanyDTO O objeto AuthCompanyDTO contendo as credenciais da empresa para autenticação
+     * @return O token JWT gerado para a empresa autenticada
+     * @throws AuthenticationException se a autenticação falhar devido a credenciais inválidas
+     * @throws UsernameNotFoundException se o nome de usuário não existir no sistema
+     */
+    public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException, UsernameNotFoundException {
 
         // Verifica se o username existe.
         var company = companyRepository.findByUsername(authCompanyDTO.getUsername()).orElseThrow(
                 () -> new UsernameNotFoundException("Username/Password incorrect.")
         );
 
-        // Verificar se as senhas sao iguais
+        // Verificar se as senhas são iguais
         var passwordMatches = this.passwordEncoder.matches(authCompanyDTO.getPassword(), company.getPassword());
 
-        //Se nao for igual -> Retorna erro.
+        // Se não forem iguais, retorna erro.
         if (!passwordMatches) {
             throw new AuthenticationException();
         }
 
-        // Se for igual -> Gerar token
+        // Se forem iguais, gera o token JWT
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         var token = JWT.create().withIssuer("javagas")
-                .withExpiresAt(Instant.now().plus(Duration.ofHours(2))) // Limite de tempo para experir o token
+                .withExpiresAt(Instant.now().plus(Duration.ofHours(2))) // Limite de tempo para expirar o token
                 .withSubject(company.getId().toString())
                 .sign(algorithm);
         return token;

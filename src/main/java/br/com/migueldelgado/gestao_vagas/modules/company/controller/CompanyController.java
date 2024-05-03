@@ -17,6 +17,11 @@ public class CompanyController {
     @Autowired
     CreateCompanyUseCase createCompanyUseCase;
 
+    /**
+     * Endpoint para criar uma nova empresa.
+     * @param companyEntity O objeto CompanyEntity contendo os dados da empresa a ser criada
+     * @return ResponseEntity com o status HTTP e, em caso de sucesso, os dados da empresa criada
+     */
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CompanyEntity companyEntity){
         try{
@@ -26,6 +31,4 @@ public class CompanyController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
 }

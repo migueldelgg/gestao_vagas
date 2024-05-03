@@ -14,6 +14,11 @@ public class CandidateController {
     @Autowired
     CreateCandidateUseCase createCandidateUseCase;
 
+    /**
+     * Endpoint para criar um novo candidato com validação de entrada e tratamento de exceções.
+     * @param candidateEntity O objeto CandidateEntity contendo os dados do candidato a ser criado
+     * @return ResponseEntity com o status HTTP e, em caso de sucesso, os dados do candidato criado
+     */
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity){
         try{

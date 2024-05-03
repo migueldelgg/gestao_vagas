@@ -17,12 +17,19 @@ public class ExceptionHandlerController {
 
     private MessageSource messageSource;
 
-    public ExceptionHandlerController (MessageSource messageSource){
+    public ExceptionHandlerController(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
+
+    /**
+     * Método para lidar com exceções de validação de argumentos em requisições, retornando uma lista de mensagens de erro detalhadas.
+     * @param e A exceção MethodArgumentNotValidException a ser tratada
+     * @return ResponseEntity contendo uma lista de ErrorMessageDTO e o status HTTP correspondente
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ErrorMessageDTO>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+    public ResponseEntity<List<ErrorMessageDTO>>
+    handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         List<ErrorMessageDTO> dto = new ArrayList<>();
 
         e.getBindingResult().getFieldErrors().forEach(err -> {
