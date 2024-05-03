@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.time.Duration;
+import java.time.Instant;
 
 @Service
 public class AuthCompanyUseCase {
@@ -25,11 +27,13 @@ public class AuthCompanyUseCase {
     private PasswordEncoder passwordEncoder;
 
     public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
+
+        // Verifica se o username existe.
         var company = companyRepository.findByUsername(authCompanyDTO.getUsername()).orElseThrow(
                 () -> new UsernameNotFoundException("Username/Password incorrect.")
         );
 
-        // Verificar se senha sao iguais
+        // Verificar se as senhas sao iguais
         var passwordMatches = this.passwordEncoder.matches(authCompanyDTO.getPassword(), company.getPassword());
 
         //Se nao for igual -> Retorna erro.
@@ -40,6 +44,7 @@ public class AuthCompanyUseCase {
         // Se for igual -> Gerar token
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         var token = JWT.create().withIssuer("javagas")
+                .withExpiresAt(Instant.now().plus(Duration.ofHours(2))) // Limite de tempo para experir o token
                 .withSubject(company.getId().toString())
                 .sign(algorithm);
         return token;
