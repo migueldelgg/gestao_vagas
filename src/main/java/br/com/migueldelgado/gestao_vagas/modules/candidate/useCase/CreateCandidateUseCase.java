@@ -4,12 +4,16 @@ import br.com.migueldelgado.gestao_vagas.exceptions.UserFoundException;
 import br.com.migueldelgado.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.migueldelgado.gestao_vagas.modules.candidate.repositories.CandidateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateCandidateUseCase {
     @Autowired
     private CandidateRepository candidateRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Executa a lógica de criação de um novo candidato, verificando se já existe um usuário com o mesmo nome de usuário ou e-mail.
@@ -24,6 +28,10 @@ public class CreateCandidateUseCase {
                     throw new UserFoundException();
                 });
         // Salva o novo candidato no banco de dados
+
+        var password = passwordEncoder.encode(candidateEntity.getPassword()); //faz a criptografia da senha do candidato
+        candidateEntity.setPassword(password);
+
         return candidateRepository.save(candidateEntity);
     }
 }
