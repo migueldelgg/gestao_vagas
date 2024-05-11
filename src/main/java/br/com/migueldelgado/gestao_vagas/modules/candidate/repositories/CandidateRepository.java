@@ -13,6 +13,7 @@ public interface CandidateRepository extends JpaRepository<CandidateEntity, UUID
      * sintaxe -> findBy Atributo Condicional(or, and) Atributo
      */
     Optional<CandidateEntity> findByUsernameOrEmail(String username, String email);
+    Optional<CandidateEntity> findByUsername(String username);
 
 
 }
