@@ -33,7 +33,6 @@ public class JWTProvider {
         }catch (JWTVerificationException E){
             // Em caso de falha na validação, imprime o stack trace e retorna uma string vazia
             E.printStackTrace();
-
             return "";
         }
     }

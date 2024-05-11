@@ -33,6 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         // Obtém o cabeçalho Authorization da requisição
+        // apidog -> Auth -> Bearer Token -> Token
         String header = request.getHeader("Authorization");
 
         // Limpa qualquer autenticação anterior do contexto de segurança
@@ -57,9 +58,10 @@ public class SecurityFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                SecurityContextHolder.getContext().setAuthentication(auth); // Em todas as requisicoes o spring consegue ir verificando se o usuario esta autenticado
             }
         }
+        //Se o header for nulo e for uma requisição que não necessita de autenticação ele passara pelo filtro se não o filtro ira retornar um erro de não autorizado.
 
         // Encaminha a requisição para o próximo filtro na cadeia
         filterChain.doFilter(request, response);

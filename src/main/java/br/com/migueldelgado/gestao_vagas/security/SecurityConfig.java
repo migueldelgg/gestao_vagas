@@ -30,7 +30,7 @@ public class SecurityConfig {
                             .requestMatchers("/auth/company").permitAll();
                     auth.anyRequest().authenticated();
                 })
-                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
+                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class); //Cria um filtro e pede pro spring security passe pelo filtro
         return http.build();
     }
 
