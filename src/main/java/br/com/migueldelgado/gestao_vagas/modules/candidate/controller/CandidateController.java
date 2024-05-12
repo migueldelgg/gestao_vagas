@@ -2,17 +2,26 @@ package br.com.migueldelgado.gestao_vagas.modules.candidate.controller;
 
 import br.com.migueldelgado.gestao_vagas.modules.candidate.entities.CandidateEntity;
 import br.com.migueldelgado.gestao_vagas.modules.candidate.useCase.CreateCandidateUseCase;
+import br.com.migueldelgado.gestao_vagas.modules.candidate.useCase.ProfileCandidateUseCase;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/candidate")
 public class CandidateController {
 
     @Autowired
-    CreateCandidateUseCase createCandidateUseCase;
+    private CreateCandidateUseCase createCandidateUseCase;
+
+    @Autowired
+    private ProfileCandidateUseCase profileCandidateUseCase;
 
     /**
      * Endpoint para criar um novo candidato com validação de entrada e tratamento de exceções.
@@ -24,6 +33,19 @@ public class CandidateController {
         try{
             var result = createCandidateUseCase.execute(candidateEntity);
             return ResponseEntity.ok().body(result);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Object> get(HttpServletRequest request) {
+
+        var idCandidate = request.getAttribute("candidate_id");
+
+        try{
+            var profile = profileCandidateUseCase.execute(UUID.fromString(idCandidate.toString()));
+            return ResponseEntity.ok().body(profile);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
