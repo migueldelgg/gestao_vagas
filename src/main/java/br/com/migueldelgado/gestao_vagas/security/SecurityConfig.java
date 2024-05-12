@@ -15,6 +15,9 @@ public class SecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
 
+    @Autowired
+    private SecurityCandidateFilter candidateFilter;
+
     /**
      * Configuração de segurança para a aplicação.
      * @param http O objeto HttpSecurity para configurar as regras de segurança
@@ -31,7 +34,8 @@ public class SecurityConfig {
                             .requestMatchers("/candidate/auth").permitAll();
                     auth.anyRequest().authenticated();
                 })
-                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class); //Cria um filtro e pede pro spring security passe pelo filtro
+                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class) //Cria um filtro e pede pro spring security passe pelo filtro
+                .addFilterBefore(candidateFilter, BasicAuthenticationFilter.class);
         return http.build();
     }
 
