@@ -29,27 +29,26 @@ public class CandidateController {
      * @return ResponseEntity com o status HTTP e, em caso de sucesso, os dados do candidato criado
      */
     @PostMapping("/")
-    public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity){
-        try{
+    public ResponseEntity<Object> create(@Valid @RequestBody CandidateEntity candidateEntity) {
+        try {
             var result = createCandidateUseCase.execute(candidateEntity);
             return ResponseEntity.ok().body(result);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/")
     public ResponseEntity<Object> get(HttpServletRequest request) {
-
         var idCandidate = request.getAttribute("candidate_id");
 
-        try{
-            var profile = profileCandidateUseCase.execute(UUID.fromString(idCandidate.toString()));
+        try {
+            var profile = this.profileCandidateUseCase
+                    .execute(UUID.fromString(idCandidate.toString()));
             return ResponseEntity.ok().body(profile);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-
 }
+

@@ -22,14 +22,14 @@ import java.util.Arrays;
 @Service
 public class AuthCandidateUseCase {
 
+    @Value("${security.token.secret.candidate}")
+    private String secretKey;
+
     @Autowired
     private CandidateRepository candidateRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Value("${security.token.secret.candidate}")
-    private String secretKey;
 
     /**
      * Método para autenticar um candidato com base nas credenciais fornecidas.
@@ -38,26 +38,22 @@ public class AuthCandidateUseCase {
      * @return Objeto de transferência de dados contendo o token de acesso gerado para o candidato autenticado.
      * @throws AuthenticationException Se as credenciais do candidato forem inválidas ou não puderem ser autenticadas.
      */
-    public AuthCandidateResponseDTO execute(AuthCandidateRequestDTO authCandidateRequestDTO) throws AuthenticationException {
-
-        // Busca o candidato no repositório pelo nome de usuário
+    public AuthCandidateResponseDTO execute(AuthCandidateRequestDTO authCandidateRequestDTO)
+            throws AuthenticationException {
         var candidate = this.candidateRepository.findByUsername(authCandidateRequestDTO.username())
-                .orElseThrow(() -> new UsernameNotFoundException("Username/Password incorrect"));
+                .orElseThrow(() -> {
+                    throw new UsernameNotFoundException("Username/password incorrect");
+                });
 
-        // Verifica se a senha fornecida corresponde à senha do candidato no banco de dados
         var passwordMatches = this.passwordEncoder
                 .matches(authCandidateRequestDTO.password(), candidate.getPassword());
 
-        // Se as senhas não corresponderem, lança uma exceção de autenticação
         if (!passwordMatches) {
             throw new AuthenticationException();
         }
 
-        // Configura o algoritmo e cria um token JWT para o candidato autenticado
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
-
         var expiresIn = Instant.now().plus(Duration.ofMinutes(10));
-
         var token = JWT.create()
                 .withIssuer("javagas")
                 .withSubject(candidate.getId().toString())
@@ -65,13 +61,11 @@ public class AuthCandidateUseCase {
                 .withExpiresAt(expiresIn)
                 .sign(algorithm);
 
-        // Constrói e retorna a resposta de autenticação contendo o token de acesso
-        var authCandidateResponse = AuthCandidateResponseDTO.builder()
-                .acess_token(token)
+        var AuthCandidateResponse = AuthCandidateResponseDTO.builder()
+                .access_token(token)
                 .expires_in(expiresIn.toEpochMilli())
                 .build();
 
-        return authCandidateResponse;
+        return AuthCandidateResponse;
     }
-
 }

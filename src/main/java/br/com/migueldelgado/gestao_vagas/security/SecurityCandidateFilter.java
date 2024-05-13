@@ -22,22 +22,26 @@ public class SecurityCandidateFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        SecurityContextHolder.getContext().setAuthentication(null);
 
+        SecurityContextHolder.getContext().setAuthentication(null);
         String header = request.getHeader("Authorization");
 
-        if(header != null){
-            var token = provider.validateToken(header);
+        if (request.getRequestURI().startsWith("/candidate")) {
+            if (header != null) {
+                var token = provider.validateToken(header);
 
-            if(token == null){
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
+                if (token == null) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+
+                request.setAttribute("candidate_id", token.getSubject());
+                System.out.println("============ TOKEN ============");
+                System.out.println(token.getClaim("roles"));
             }
 
-            request.setAttribute("candidate_id", token.getSubject());
-            System.out.println("============ TOKEN ============");
-            System.out.println(token);
         }
+
 
         filterChain.doFilter(request, response);
     }

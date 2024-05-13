@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.naming.AuthenticationException;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/company")
 public class AuthCompanyController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class AuthCompanyController {
      * @return ResponseEntity com o status HTTP e, em caso de sucesso, os dados da empresa autenticada
      * @throws AuthenticationException se a autenticação falhar
      */
-    @PostMapping("/company")
+    @PostMapping("/auth")
     public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
 
         try{

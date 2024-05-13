@@ -12,6 +12,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthCandidateResponseDTO {
-    private String acess_token;
+    private String access_token;
     private Long expires_in;
 }
