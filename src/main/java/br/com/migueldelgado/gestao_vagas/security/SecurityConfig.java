@@ -20,6 +20,11 @@ public class SecurityConfig {
     @Autowired
     private SecurityCandidateFilter candidateFilter;
 
+    private static final String[] SWAGGER_LIST = {
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**"
+    };
     /**
      * Configuração de segurança para a aplicação.
      * @param http O objeto HttpSecurity para configurar as regras de segurança
@@ -33,7 +38,8 @@ public class SecurityConfig {
                     auth.requestMatchers("/candidate/").permitAll()
                             .requestMatchers("/company/").permitAll()
                             .requestMatchers("/company/auth").permitAll()
-                            .requestMatchers("/candidate/auth").permitAll();
+                            .requestMatchers("/candidate/auth").permitAll()
+                            .requestMatchers(SWAGGER_LIST).permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(candidateFilter, BasicAuthenticationFilter.class)
