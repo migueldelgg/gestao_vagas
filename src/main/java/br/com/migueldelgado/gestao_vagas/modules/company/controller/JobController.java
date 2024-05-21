@@ -17,7 +17,7 @@ import java.util.UUID;
  * Controlador REST para operações relacionadas a vagas de emprego.
  */
 @RestController
-@RequestMapping("/job")
+@RequestMapping("/company/job")
 public class JobController {
 
     @Autowired
@@ -40,6 +40,7 @@ public class JobController {
                 .benefits(createJobDTO.getBenefits()) // Define os benefícios da vaga de emprego
                 .level(createJobDTO.getLevel()) // Define o nível da vaga de emprego
                 .companyId(UUID.fromString(companyId.toString())) // Converte o companyId de String para UUID
+                .description(createJobDTO.getDescription())
                 .build(); // Finaliza a construção da entidade de vaga de emprego
 
         // Executa o caso de uso para criar a vaga de emprego, passando a nova entidade como argumento, e retorna a entidade criada

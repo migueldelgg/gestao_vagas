@@ -8,6 +8,7 @@ import lombok.Data;
 @Builder
 public class CreateJobDTO {
 
+    @NotBlank
     private String description;
     private String benefits;
 
