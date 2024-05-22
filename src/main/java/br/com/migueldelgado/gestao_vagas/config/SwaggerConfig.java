@@ -26,7 +26,6 @@ public class SwaggerConfig {
         */
     }
 
-    @Bean
     private SecurityScheme createSecurityScheme() {
         return new SecurityScheme().name("jwt_auth").type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT");
     }
