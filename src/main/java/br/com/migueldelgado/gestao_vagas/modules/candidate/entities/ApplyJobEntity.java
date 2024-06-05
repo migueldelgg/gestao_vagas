@@ -38,5 +38,4 @@ public class ApplyJobEntity {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
 }

@@ -2,6 +2,7 @@ package br.com.migueldelgado.gestao_vagas.modules.candidate.useCase;
 
 import br.com.migueldelgado.gestao_vagas.exceptions.JobNotFoundException;
 import br.com.migueldelgado.gestao_vagas.exceptions.UserNotFoundException;
+import br.com.migueldelgado.gestao_vagas.modules.candidate.entities.ApplyJobEntity;
 import br.com.migueldelgado.gestao_vagas.modules.candidate.repositories.ApplyJobsRepository;
 import br.com.migueldelgado.gestao_vagas.modules.candidate.repositories.CandidateRepository;
 import br.com.migueldelgado.gestao_vagas.modules.company.repositories.JobRepository;
@@ -24,7 +25,7 @@ public class ApplyJobCandidateUseCase {
 
     //ID do candidato
     //ID da vaga
-    public void execute(UUID idCandidate, UUID idJob) {
+    public ApplyJobEntity execute(UUID idCandidate, UUID idJob) {
 
         //Validar se o candidato existe
         this.candidateRepository.findById(idCandidate).orElseThrow(() -> {
@@ -37,7 +38,10 @@ public class ApplyJobCandidateUseCase {
         });
 
         //Candidato se inscrever na vaga
-        
+        var applyJob = ApplyJobEntity.builder().candidateId(idCandidate)
+                .jobId(idJob).build();
+
+        return applyJobsRepository.save(applyJob);
     }
 
 }
