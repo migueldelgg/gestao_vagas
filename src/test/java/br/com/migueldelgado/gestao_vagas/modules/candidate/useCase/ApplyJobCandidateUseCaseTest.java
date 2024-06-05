@@ -16,7 +16,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,6 +50,7 @@ public class ApplyJobCandidateUseCaseTest {
 
         candidate.setId(idCandidate);
 
+        // Quando for chamado findById vai retornar um objeto candidate ->
         when(candidateRepository.findById(idCandidate)).thenReturn(Optional.of(candidate));
 
         try{
