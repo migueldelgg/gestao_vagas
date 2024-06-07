@@ -29,6 +29,7 @@ import java.util.UUID;
 @RequestMapping("/candidate")
 @Tag(name = "Candidato", description = "Informações do candidato")
 public class CandidateController {
+
     @Autowired
     private CreateCandidateUseCase createCandidateUseCase;
 
