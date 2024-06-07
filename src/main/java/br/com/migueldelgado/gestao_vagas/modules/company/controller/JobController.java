@@ -13,7 +13,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,19 +49,28 @@ public class JobController {
             })
     })
     @SecurityRequirement(name = "jwt_auth")
-    public JobEntity create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest request){
+    public ResponseEntity<Object> create(@Valid @RequestBody CreateJobDTO createJobDTO, HttpServletRequest request){
         // Obtém o ID da empresa da requisição
         var companyId = request.getAttribute("company_id");
 
-        // Cria uma nova entidade de vaga de emprego com base nos dados recebidos na requisição
-        var jobEntity = JobEntity.builder()
-                .benefits(createJobDTO.getBenefits()) // Define os benefícios da vaga de emprego
-                .level(createJobDTO.getLevel()) // Define o nível da vaga de emprego
-                .companyId(UUID.fromString(companyId.toString())) // Converte o companyId de String para UUID
-                .description(createJobDTO.getDescription())
-                .build(); // Finaliza a construção da entidade de vaga de emprego
+        try{
+            // Cria uma nova entidade de vaga de emprego com base nos dados recebidos na requisição
+            var jobEntity = JobEntity.builder()
+                    .benefits(createJobDTO.getBenefits())
+                    .level(createJobDTO.getLevel())
+                    .companyId(UUID.fromString(companyId.toString()))
+                    .description(createJobDTO.getDescription())
+                    .build();
 
-        // Executa o caso de uso para criar a vaga de emprego, passando a nova entidade como argumento, e retorna a entidade criada
-        return createJobUseCase.execute(jobEntity);
+            // Executa o caso de uso para criar a vaga de emprego, passando a nova entidade como argumento, e armazena a entidade criada
+            var result =  createJobUseCase.execute(jobEntity);
+
+            return ResponseEntity.ok().body(result);
+
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+
     }
 }

@@ -1,5 +1,6 @@
 package br.com.migueldelgado.gestao_vagas.modules.company.controllers;
 
+import br.com.migueldelgado.gestao_vagas.exceptions.CompanyNotFoundException;
 import br.com.migueldelgado.gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.migueldelgado.gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.migueldelgado.gestao_vagas.modules.company.repositories.CompanyRepository;
@@ -18,6 +19,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+
+
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -42,26 +50,55 @@ public class CreateJobControllerTest {
     @Test
     public void should_be_able_to_create_a_new_job() throws Exception {
 
-        var company = CompanyEntity.builder().description("COMPANY_DESCRIPTION").email("email@company.com")
-                .password("1234567890").name("COMPANY_NAME").website("www.company.com")
-                .username("COMPANY_USERNAME").build();
+        // Cria e salva uma nova entidade de companhia
+        var company = CompanyEntity.builder()
+                .description("COMPANY_DESCRIPTION")
+                .email("email@company.com")
+                .password("1234567890")
+                .name("COMPANY_NAME")
+                .website("www.company.com")
+                .username("COMPANY_USERNAME")
+                .build();
 
         companyRepository.saveAndFlush(company);
 
+        // Cria o DTO de criação de trabalho
         var createdJobDTO = CreateJobDTO.builder()
                 .benefits("BENEFITS_TEST")
                 .description("DESCRIPTION_TEST")
                 .level("LEVEL_TEST")
                 .build();
 
+        // Realiza a requisição POST e verifica o status da resposta
         var result = mvc.perform(MockMvcRequestBuilders.post("/company/job/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(TestUtils.objectToJson(createdJobDTO))
-                        .header("Authorization", TestUtils.generateToken(company.getId(),
-                                "JAVAGAS_@123#"))
+                        .header("Authorization", TestUtils.generateToken(company.getId(), "JAVAGAS_@123#"))
                 )
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
         System.out.println(result);
+    }
+
+    @Test
+    public void should_be_able_to_create_a_new_job_if_company_not_found() {
+
+        // Cria o DTO de criação de trabalho
+        var createdJobDTO = CreateJobDTO.builder()
+                .benefits("BENEFITS_TEST")
+                .description("DESCRIPTION_TEST")
+                .level("LEVEL_TEST")
+                .build();
+
+        // Realiza a requisição POST e verifica o status da resposta
+        try{
+            mvc.perform(MockMvcRequestBuilders.post("/company/job/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtils.objectToJson(createdJobDTO))
+                    .header("Authorization", TestUtils.generateToken(UUID.randomUUID(), "JAVAGAS_@123#"))
+            );
+        }catch(Exception e){
+            assertThat(e).isInstanceOf(CompanyNotFoundException.class);
+        }
     }
 }
