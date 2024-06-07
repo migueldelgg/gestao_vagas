@@ -90,7 +90,7 @@ public class ApplyJobCandidateUseCaseTest {
 
         assertThat(result).hasFieldOrProperty("id");
         assertNotNull(result.getId());
-        
+
     }
 
 }
