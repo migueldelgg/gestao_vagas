@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig {
 
     @Autowired
-    private SecurityFilter securityFilter;
+    private SecurityCompanyFilter securityCompanyFilter;
 
     @Autowired
     private SecurityCandidateFilter candidateFilter;
@@ -43,7 +43,7 @@ public class SecurityConfig {
                     auth.anyRequest().authenticated();
                 })
                 .addFilterBefore(candidateFilter, BasicAuthenticationFilter.class)
-                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class); //Cria um filtro e pede pro spring security passe pelo filtro
+                .addFilterBefore(securityCompanyFilter, BasicAuthenticationFilter.class); //Cria um filtro e pede pro spring security passe pelo filtro
 
         return http.build();
     }
