@@ -18,19 +18,15 @@ public class SecurityConfig {
     private SecurityCompanyFilter securityCompanyFilter;
 
     @Autowired
-    private SecurityCandidateFilter candidateFilter;
+    private SecurityCandidateFilter securityCandidateFilter;
 
-    private static final String[] SWAGGER_LIST = {
+    private static final String[] PERMIT_ALL_LIST = {
             "/swagger-ui/**",
             "/v3/api-docs/**",
-            "/swagger-resources/**"
+            "/swagger-resource/**",
+            "/actuator/**"
     };
-    /**
-     * Configuração de segurança para a aplicação.
-     * @param http O objeto HttpSecurity para configurar as regras de segurança
-     * @return Um objeto SecurityFilterChain contendo as configurações de segurança
-     * @throws Exception se ocorrer um erro durante a configuração
-     */
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
@@ -39,12 +35,11 @@ public class SecurityConfig {
                             .requestMatchers("/company/").permitAll()
                             .requestMatchers("/company/auth").permitAll()
                             .requestMatchers("/candidate/auth").permitAll()
-                            .requestMatchers(SWAGGER_LIST).permitAll();
+                            .requestMatchers(PERMIT_ALL_LIST).permitAll();
                     auth.anyRequest().authenticated();
                 })
-                .addFilterBefore(candidateFilter, BasicAuthenticationFilter.class)
-                .addFilterBefore(securityCompanyFilter, BasicAuthenticationFilter.class); //Cria um filtro e pede pro spring security passe pelo filtro
-
+                .addFilterBefore(securityCandidateFilter, BasicAuthenticationFilter.class)
+                .addFilterBefore(securityCompanyFilter, BasicAuthenticationFilter.class);
         return http.build();
     }
 
