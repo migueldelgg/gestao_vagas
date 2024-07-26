@@ -4,6 +4,8 @@ import br.com.migueldelgado.gestao_vagas.modules.company.dto.CreateJobDTO;
 import br.com.migueldelgado.gestao_vagas.modules.company.entities.CompanyEntity;
 import br.com.migueldelgado.gestao_vagas.modules.company.repositories.CompanyRepository;
 import br.com.migueldelgado.gestao_vagas.utils.TestUtils;
+
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,11 +46,13 @@ public class CreateJobControllerTest {
     @Test
     public void should_be_able_to_create_a_new_job() throws Exception {
 
+        var randomPasswordString = TestUtils.generateRandomNumberString(10);
+
         // Cria e salva uma nova entidade de companhia
         var company = CompanyEntity.builder()
                 .description("COMPANY_DESCRIPTION")
                 .email("email@company.com")
-                .password("1234567890")
+                .password(randomPasswordString)
                 .name("COMPANY_NAME")
                 .website("www.company.com")
                 .username("COMPANY_USERNAME")
