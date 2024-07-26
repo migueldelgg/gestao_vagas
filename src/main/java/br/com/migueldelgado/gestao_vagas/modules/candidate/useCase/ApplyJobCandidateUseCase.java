@@ -44,4 +44,12 @@ public class ApplyJobCandidateUseCase {
         return applyJobsRepository.save(applyJob);
     }
 
+    public String getCandidateName(UUID idCandidate){
+        var candidate = this.candidateRepository.findById(idCandidate).orElseThrow(() -> {
+            throw new UserNotFoundException();
+        });
+        
+        return candidate.getName();
+    }
+
 }
